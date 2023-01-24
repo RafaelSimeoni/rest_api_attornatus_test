@@ -1,6 +1,7 @@
-package com.rafael.restapiattornatustest.model.forms;
+package com.rafael.restapiattornatustest.models.forms;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public class PersonForm {
     @Length(min = 3, max = 100, message = "Name field must be between 3 and 100 characters")
     private String name;
 
-    @NotBlank(message = "birth date field cannot be empty")
+    @NotNull(message = "birth date field cannot be null")
     @Past(message = "birth date field must be in the past")
     private LocalDate birthDate;
 }

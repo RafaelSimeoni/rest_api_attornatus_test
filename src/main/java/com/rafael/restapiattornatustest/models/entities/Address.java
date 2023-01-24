@@ -1,4 +1,4 @@
-package com.rafael.restapiattornatustest.model.entities;
+package com.rafael.restapiattornatustest.models.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

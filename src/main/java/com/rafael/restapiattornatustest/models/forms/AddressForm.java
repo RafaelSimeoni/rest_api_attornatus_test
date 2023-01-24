@@ -1,4 +1,4 @@
-package com.rafael.restapiattornatustest.model.forms;
+package com.rafael.restapiattornatustest.models.forms;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

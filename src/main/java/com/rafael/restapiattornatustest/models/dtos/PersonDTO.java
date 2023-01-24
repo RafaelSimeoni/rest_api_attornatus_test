@@ -1,4 +1,4 @@
-package com.rafael.restapiattornatustest.model.dtos;
+package com.rafael.restapiattornatustest.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
