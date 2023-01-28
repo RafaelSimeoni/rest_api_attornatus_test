@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,4 +28,10 @@ public class PersonController {
    public ResponseEntity<PersonDTO> findPersonById(@PathVariable UUID personId) {
         return ResponseEntity.status(HttpStatus.OK).body(personService.findPersonById(personId));
    }
+
+   @GetMapping
+    public ResponseEntity<List<PersonDTO>> findAllPersons() {
+        return ResponseEntity.status(HttpStatus.OK).body(personService.findAllPersons());
+   }
+
 }

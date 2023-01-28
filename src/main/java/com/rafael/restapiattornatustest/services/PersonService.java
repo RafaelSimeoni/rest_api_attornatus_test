@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,5 +34,11 @@ public class PersonService {
         Optional<Person> optionalPerson = personRepository.findById(id);
         if(optionalPerson.isEmpty()) throw new EntityNotFoundException("Person not found");
         return modelMapper.map(optionalPerson.get(), PersonDTO.class);
+    }
+
+    public List<PersonDTO> findAllPersons() {
+        List<Person> personList = personRepository.findAll();
+        if(personList.isEmpty()) throw new EntityNotFoundException("Person list is empty");
+        return personList.stream().map(person -> modelMapper.map(person, PersonDTO.class)).toList();
     }
 }
