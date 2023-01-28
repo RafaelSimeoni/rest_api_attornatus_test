@@ -20,18 +20,18 @@ public class PersonController {
     PersonService personService;
 
     @PostMapping
-    public ResponseEntity<PersonDTO> savePerson(@RequestBody @Valid PersonForm personForm) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(personService.savePerson(personForm));
+    public ResponseEntity<PersonDTO> save(@RequestBody @Valid PersonForm personForm) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(personService.save(personForm));
     }
 
    @GetMapping("/{personId}")
-   public ResponseEntity<PersonDTO> findPersonById(@PathVariable UUID personId) {
-        return ResponseEntity.status(HttpStatus.OK).body(personService.findPersonById(personId));
+   public ResponseEntity<PersonDTO> findById(@PathVariable UUID personId) {
+        return ResponseEntity.status(HttpStatus.OK).body(personService.findById(personId));
    }
 
    @GetMapping
-    public ResponseEntity<List<PersonDTO>> findAllPersons() {
-        return ResponseEntity.status(HttpStatus.OK).body(personService.findAllPersons());
+    public ResponseEntity<List<PersonDTO>> findAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(personService.findAll());
    }
 
 }
