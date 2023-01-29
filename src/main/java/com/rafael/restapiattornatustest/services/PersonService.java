@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,9 +36,9 @@ public class PersonService {
     }
 
     public PersonDTO findById(UUID personId) {
-        Optional<Person> optionalPerson = personRepository.findById(personId);
-        if(optionalPerson.isEmpty()) throw new EntityNotFoundException("Person not found");
-        return modelMapper.map(optionalPerson.get(), PersonDTO.class);
+        Person recoveryPerson = personRepository.findById(personId)
+                .orElseThrow(() -> new EntityNotFoundException("Person not found"));
+        return modelMapper.map(recoveryPerson, PersonDTO.class);
     }
 
     public List<PersonDTO> findAll() {
@@ -50,12 +49,12 @@ public class PersonService {
 
     @Transactional
     public PersonDTO update(UUID personId, PersonForm personForm) {
-        Optional<Person> personToUpdateOptional = personRepository.findById(personId);
-        if(personToUpdateOptional.isEmpty()) throw new EntityNotFoundException("Person not found");
+        Person personToUpdate = personRepository.findById(personId)
+                .orElseThrow(() -> new EntityNotFoundException("Person not found"));
 
-        modelMapper.map(personForm, personToUpdateOptional.get());
+        modelMapper.map(personForm, personToUpdate);
 
-        Person updatedPerson = personRepository.save(personToUpdateOptional.get());
+        Person updatedPerson = personRepository.save(personToUpdate);
         return modelMapper.map(updatedPerson, PersonDTO.class);
     }
 
