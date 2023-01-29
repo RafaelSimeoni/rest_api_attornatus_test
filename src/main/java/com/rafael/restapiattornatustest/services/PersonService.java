@@ -2,6 +2,7 @@ package com.rafael.restapiattornatustest.services;
 
 import com.rafael.restapiattornatustest.exceptions.EntityNotFoundException;
 import com.rafael.restapiattornatustest.models.dtos.AddressDTO;
+import com.rafael.restapiattornatustest.models.dtos.PersonAddressesDTO;
 import com.rafael.restapiattornatustest.models.dtos.PersonDTO;
 import com.rafael.restapiattornatustest.models.entities.Address;
 import com.rafael.restapiattornatustest.models.entities.Person;
@@ -72,4 +73,11 @@ public class PersonService {
 
         return modelMapper.map(savedAddress, AddressDTO.class);
     }
+
+    public PersonAddressesDTO listPersonAddresses(UUID personId) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new EntityNotFoundException("Person not found"));
+        return modelMapper.map(person, PersonAddressesDTO.class);
+    }
+
 }

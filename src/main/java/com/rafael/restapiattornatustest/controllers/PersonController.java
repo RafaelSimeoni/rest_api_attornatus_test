@@ -1,6 +1,7 @@
 package com.rafael.restapiattornatustest.controllers;
 
 import com.rafael.restapiattornatustest.models.dtos.AddressDTO;
+import com.rafael.restapiattornatustest.models.dtos.PersonAddressesDTO;
 import com.rafael.restapiattornatustest.models.dtos.PersonDTO;
 import com.rafael.restapiattornatustest.models.forms.AddressForm;
 import com.rafael.restapiattornatustest.models.forms.PersonForm;
@@ -47,6 +48,11 @@ public class PersonController {
             @PathVariable UUID personId, @RequestBody @Valid AddressForm addressForm) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(personService.savePersonAddress(personId, addressForm));
+    }
+
+    @GetMapping("/address/{personId}")
+    public ResponseEntity<PersonAddressesDTO> listPersonAddresses(@PathVariable UUID personId) {
+        return ResponseEntity.status(HttpStatus.OK).body(personService.listPersonAddresses(personId));
     }
 
 }
