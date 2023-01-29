@@ -1,9 +1,13 @@
 package com.rafael.restapiattornatustest.services;
 
 import com.rafael.restapiattornatustest.exceptions.EntityNotFoundException;
+import com.rafael.restapiattornatustest.models.dtos.AddressDTO;
 import com.rafael.restapiattornatustest.models.dtos.PersonDTO;
+import com.rafael.restapiattornatustest.models.entities.Address;
 import com.rafael.restapiattornatustest.models.entities.Person;
+import com.rafael.restapiattornatustest.models.forms.AddressForm;
 import com.rafael.restapiattornatustest.models.forms.PersonForm;
+import com.rafael.restapiattornatustest.repositories.AddressRepository;
 import com.rafael.restapiattornatustest.repositories.PersonRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -21,6 +25,8 @@ public class PersonService {
 
     @Autowired
     PersonRepository personRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Transactional
     public PersonDTO save(PersonForm personForm) {
@@ -50,5 +56,20 @@ public class PersonService {
 
         Person updatedPerson = personRepository.save(personToUpdateOptional.get());
         return modelMapper.map(updatedPerson, PersonDTO.class);
+    }
+
+    @Transactional
+    public AddressDTO savePersonAddress(UUID personId, AddressForm addressForm) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new EntityNotFoundException("Person not found"));
+
+        Address newAddress = modelMapper.map(addressForm, Address.class);
+
+        newAddress.setIsMainAddress(person.getAddressList().isEmpty()); //Apenas o primeiro endereço adicionado será o principal
+        newAddress.setPerson(person);
+
+        Address savedAddress = addressRepository.save(newAddress);
+
+        return modelMapper.map(savedAddress, AddressDTO.class);
     }
 }
