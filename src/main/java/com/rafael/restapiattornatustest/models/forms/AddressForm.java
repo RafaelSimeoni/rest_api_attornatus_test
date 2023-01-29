@@ -1,6 +1,7 @@
 package com.rafael.restapiattornatustest.models.forms;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class AddressForm {
     @Pattern(regexp = "[0-9]{5}-[0-9]{3}", message = "Zip code field must have the format '99999-999'")
     private String zipCode;
 
-    @NotBlank(message = "Number field cannot be empty")
+    @NotNull(message = "Number field cannot be null")
     @Positive(message = "Number field must be a positive value")
     private Integer number;
 
