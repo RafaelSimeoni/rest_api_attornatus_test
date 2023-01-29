@@ -20,7 +20,7 @@ import java.util.UUID;
 public class PersonController {
 
     @Autowired
-    PersonService personService;
+    private PersonService personService;
 
     @PostMapping
     public ResponseEntity<PersonDTO> save(@RequestBody @Valid PersonForm personForm) {
@@ -53,6 +53,13 @@ public class PersonController {
     @GetMapping("/address/{personId}")
     public ResponseEntity<PersonAddressesDTO> listPersonAddresses(@PathVariable UUID personId) {
         return ResponseEntity.status(HttpStatus.OK).body(personService.listPersonAddresses(personId));
+    }
+
+    @PutMapping("/address/{personId}/{addressId}")
+    public ResponseEntity<AddressDTO> changeMainAddress(
+            @PathVariable UUID personId, @PathVariable UUID addressId) {
+        return ResponseEntity.status(HttpStatus.OK).body(personService.changeMainAddress(personId, addressId));
+
     }
 
 }

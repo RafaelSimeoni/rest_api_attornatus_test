@@ -21,12 +21,15 @@ import java.util.UUID;
 public class PersonService {
 
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Autowired
-    PersonRepository personRepository;
+    private PersonRepository personRepository;
     @Autowired
     private AddressRepository addressRepository;
+
+    public PersonService() {
+    }
 
     @Transactional
     public PersonDTO save(PersonForm personForm) {
@@ -65,7 +68,9 @@ public class PersonService {
 
         Address newAddress = modelMapper.map(addressForm, Address.class);
 
-        newAddress.setIsMainAddress(person.getAddressList().isEmpty()); //Apenas o primeiro endereço adicionado será o principal
+        //Apenas o primeiro endereço adicionado será o principal
+        newAddress.setIsMainAddress(person.getAddressList().isEmpty());
+
         newAddress.setPerson(person);
 
         Address savedAddress = addressRepository.save(newAddress);
@@ -77,6 +82,24 @@ public class PersonService {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new EntityNotFoundException("Person not found"));
         return modelMapper.map(person, PersonAddressesDTO.class);
+    }
+
+    public AddressDTO changeMainAddress(UUID personId, UUID addressId) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new EntityNotFoundException("Person not found"));
+
+        Address newMainAddress = person.getAddressList().stream()
+                .filter(address -> address.getId().equals(addressId))
+                .findFirst()
+                .orElseThrow( () -> new EntityNotFoundException("Address not found"));
+
+        //O endereço com o id igual ao fornecido será o principal e os outros não.
+        person.getAddressList().forEach(address -> address.setIsMainAddress(address.getId().equals(addressId)));
+
+        personRepository.save(person);
+
+        return modelMapper.map(newMainAddress, AddressDTO.class);
+
     }
 
 }
