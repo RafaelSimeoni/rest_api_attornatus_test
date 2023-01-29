@@ -18,5 +18,5 @@ public class AddressDTO {
     private String zipCode;
     private Integer number;
     private String city;
-    private Boolean mainAddress;
+    private Boolean isMainAddress;
 }
