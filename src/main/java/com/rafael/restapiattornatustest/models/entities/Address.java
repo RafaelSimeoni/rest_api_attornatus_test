@@ -28,7 +28,7 @@ public class Address {
     private String city;
 
     @Column(nullable = false)
-    private Boolean mainAddress;
+    private Boolean isMainAddress;
 
     public Address(String publicPlace, String zipCode, Integer number, String city) {
         this.publicPlace = publicPlace;
