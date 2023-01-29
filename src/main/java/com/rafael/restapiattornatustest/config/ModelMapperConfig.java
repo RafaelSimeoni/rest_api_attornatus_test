@@ -9,7 +9,7 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setSkipNullEnabled(true); //para ignorar atributos null
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
         return modelMapper;
     }
 }
