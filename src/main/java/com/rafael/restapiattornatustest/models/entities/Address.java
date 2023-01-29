@@ -30,6 +30,10 @@ public class Address {
     @Column(nullable = false)
     private Boolean isMainAddress;
 
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
+
     public Address(String publicPlace, String zipCode, Integer number, String city) {
         this.publicPlace = publicPlace;
         this.zipCode = zipCode;
