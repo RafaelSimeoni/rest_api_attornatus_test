@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Past;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -17,5 +18,6 @@ public class PersonForm {
 
     @NotNull(message = "birth date field cannot be null")
     @Past(message = "birth date field must be in the past")
+    @DateTimeFormat(pattern= "yyyy-mm-dd")
     private LocalDate birthDate;
 }
