@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,8 +29,8 @@ public class PersonService {
         return modelMapper.map(savedPerson, PersonDTO.class);
     }
 
-    public PersonDTO findById(UUID id) {
-        Optional<Person> optionalPerson = personRepository.findById(id);
+    public PersonDTO findById(UUID personId) {
+        Optional<Person> optionalPerson = personRepository.findById(personId);
         if(optionalPerson.isEmpty()) throw new EntityNotFoundException("Person not found");
         return modelMapper.map(optionalPerson.get(), PersonDTO.class);
     }
@@ -40,5 +39,16 @@ public class PersonService {
         List<Person> personList = personRepository.findAll();
         if(personList.isEmpty()) throw new EntityNotFoundException("Person list is empty");
         return personList.stream().map(person -> modelMapper.map(person, PersonDTO.class)).toList();
+    }
+
+    @Transactional
+    public PersonDTO update(UUID personId, PersonForm personForm) {
+        Optional<Person> personToUpdateOptional = personRepository.findById(personId);
+        if(personToUpdateOptional.isEmpty()) throw new EntityNotFoundException("Person not found");
+
+        modelMapper.map(personForm, personToUpdateOptional.get());
+
+        Person updatedPerson = personRepository.save(personToUpdateOptional.get());
+        return modelMapper.map(updatedPerson, PersonDTO.class);
     }
 }

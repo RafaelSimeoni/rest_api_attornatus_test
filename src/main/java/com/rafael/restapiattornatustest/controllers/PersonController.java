@@ -34,4 +34,10 @@ public class PersonController {
         return ResponseEntity.status(HttpStatus.OK).body(personService.findAll());
    }
 
+   @PutMapping("/{personId}")
+    public ResponseEntity<PersonDTO> update(
+            @PathVariable UUID personId, @RequestBody @Valid PersonForm personForm) {
+        return ResponseEntity.status(HttpStatus.OK).body(personService.update(personId, personForm));
+   }
+
 }
