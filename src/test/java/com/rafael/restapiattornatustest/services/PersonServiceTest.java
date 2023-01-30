@@ -1,5 +1,6 @@
 package com.rafael.restapiattornatustest.services;
 
+import com.rafael.restapiattornatustest.exceptions.EntityNotFoundException;
 import com.rafael.restapiattornatustest.models.dtos.PersonDTO;
 import com.rafael.restapiattornatustest.models.entities.Person;
 import com.rafael.restapiattornatustest.models.forms.PersonForm;
@@ -14,8 +15,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -55,6 +55,19 @@ public class PersonServiceTest {
         assertEquals(PERSON_UUID, response.getId());
         assertEquals(PERSON_NAME, response.getName());
         assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnEntityNotFoundException(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
+
+        try {
+            PersonDTO response = personService.findById(PERSON_UUID);
+            fail("Expected exception was not thrown");
+        } catch (Exception e) {
+            assertEquals(EntityNotFoundException.class, e.getClass());
+            assertEquals("Person not found", e.getMessage());
+        }
     }
 
     @Test
