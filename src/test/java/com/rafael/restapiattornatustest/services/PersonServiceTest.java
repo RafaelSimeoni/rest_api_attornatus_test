@@ -65,13 +65,18 @@ public class PersonServiceTest {
     @Test
     void whenFindByIdThenReturnAnPersonInstance(){
         when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
-        PersonDTO response = personService.findById(PERSON_UUID);
 
-        assertNotNull(response);
-        assertEquals(PersonDTO.class, response.getClass());
-        assertEquals(PERSON_UUID, response.getId());
-        assertEquals(PERSON_NAME, response.getName());
-        assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+        try {
+            PersonDTO response = personService.findById(PERSON_UUID);
+            assertNotNull(response);
+            assertEquals(PersonDTO.class, response.getClass());
+            assertEquals(PERSON_UUID, response.getId());
+            assertEquals(PERSON_NAME, response.getName());
+            assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+        } catch (Exception e) {
+            fail("Unexpected exception was thrown");
+        }
+
     }
 
     @Test
@@ -108,13 +113,18 @@ public class PersonServiceTest {
         when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
         when(personRepository.save(Mockito.any(Person.class))).thenReturn(person);
 
-        PersonDTO response = personService.update(PERSON_UUID, personForm);
+        try {
+            PersonDTO response = personService.update(PERSON_UUID, personForm);
 
-        assertNotNull(response);
-        assertEquals(PersonDTO.class, response.getClass());
-        assertEquals(PERSON_UUID, response.getId());
-        assertEquals(PERSON_NAME, response.getName());
-        assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+            assertNotNull(response);
+            assertEquals(PersonDTO.class, response.getClass());
+            assertEquals(PERSON_UUID, response.getId());
+            assertEquals(PERSON_NAME, response.getName());
+            assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+        } catch (Exception e) {
+            fail("Unexpected exception was thrown");
+        }
+
     }
 
     @Test
