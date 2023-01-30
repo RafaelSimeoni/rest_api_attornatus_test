@@ -105,7 +105,7 @@ public class PersonServiceTest {
         when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
 
         try {
-            PersonDTO response = personService.findById(PERSON_UUID);
+            personService.findById(PERSON_UUID);
             fail("Expected exception was not thrown");
         } catch (Exception e) {
             assertEquals(EntityNotFoundException.class, e.getClass());
@@ -153,7 +153,7 @@ public class PersonServiceTest {
         when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
 
         try {
-            PersonDTO response = personService.update(PERSON_UUID, personForm);
+            personService.update(PERSON_UUID, personForm);
             fail("Expected exception was not thrown");
         } catch (Exception e) {
             assertEquals(EntityNotFoundException.class, e.getClass());
@@ -188,9 +188,8 @@ public class PersonServiceTest {
         when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
 
         try {
-            AddressDTO response = personService.savePersonAddress(PERSON_UUID, addressForm);
+            personService.savePersonAddress(PERSON_UUID, addressForm);
             fail("Expected exception was not thrown");
-
         } catch (Exception e) {
             assertEquals(EntityNotFoundException.class, e.getClass());
             assertEquals("Person not found", e.getMessage());
@@ -209,7 +208,7 @@ public class PersonServiceTest {
             assertEquals(PersonAddressesDTO.class, response.getClass());
             assertEquals(PERSON_UUID, response.getId());
             assertEquals(PERSON_NAME, response.getName());
-            assertEquals(1, response.getAddressList().size());
+            assertEquals(2, response.getAddressList().size());
             assertEquals(ADDRESS_UUID, response.getAddressList().get(0).getId());
             assertEquals(ADDRESS_NUMBER, response.getAddressList().get(0).getNumber());
             assertEquals(ADDRESS_CITY, response.getAddressList().get(0).getCity());
@@ -226,7 +225,7 @@ public class PersonServiceTest {
         when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
 
         try {
-            PersonAddressesDTO response = personService.listPersonAddresses(PERSON_UUID);
+            personService.listPersonAddresses(PERSON_UUID);
             fail("Expected exception was not thrown");
 
         } catch (Exception e) {
@@ -238,7 +237,6 @@ public class PersonServiceTest {
     @Test
     void whenChangeMainAddressThenReturnAnAddressDTOAndChangeTheMainAddress(){
         when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
-        person.addAddress(address2);
 
         try {
             AddressDTO response = personService.changeMainAddress(PERSON_UUID, ADDRESS2_UUID);
@@ -254,6 +252,34 @@ public class PersonServiceTest {
 
         } catch (Exception e) {
             fail("Unexpected exception was thrown");
+        }
+    }
+
+    @Test
+    void whenChangeMainAddressThenReturnAnEntityNotFoundException(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
+
+        try {
+            personService.changeMainAddress(PERSON_UUID, ADDRESS2_UUID);
+            fail("Expected exception was not thrown");
+
+        } catch (Exception e) {
+            assertEquals(EntityNotFoundException.class, e.getClass());
+            assertEquals("Person not found", e.getMessage());
+        }
+    }
+
+    @Test
+    void whenChangeMainAddressThenReturnAnEntityNotFoundExceptionCase2(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
+
+        try {
+            personService.changeMainAddress(PERSON_UUID, UUID.randomUUID());
+            fail("Expected exception was not thrown");
+
+        } catch (Exception e) {
+            assertEquals(EntityNotFoundException.class, e.getClass());
+            assertEquals("Address not found", e.getMessage());
         }
     }
 
@@ -285,6 +311,7 @@ public class PersonServiceTest {
         person.setName(PERSON_NAME);
         person.setBirthDate(PERSON_BIRTHDATE);
         person.addAddress(address);
+        person.addAddress(address2);
 
         personForm = new PersonForm();
         personForm.setName(PERSON_NAME);
