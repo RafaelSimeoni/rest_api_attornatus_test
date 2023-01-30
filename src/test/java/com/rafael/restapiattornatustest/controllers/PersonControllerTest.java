@@ -80,7 +80,23 @@ public class PersonControllerTest {
     }
 
     @Test
-    void findAll(){}
+    void whenFindAllThenReturnAListOfPersonDTO(){
+        when(personService.findAll()).thenReturn(personDTOList);
+
+        ResponseEntity<List<PersonDTO>> response = personController.findAll();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(ArrayList.class, response.getBody().getClass());
+        assertEquals(1, response.getBody().size());
+        assertEquals(PERSON_UUID, response.getBody().get(0).getId());
+        assertEquals(PERSON_NAME, response.getBody().get(0).getName());
+        assertEquals(PERSON_BIRTHDATE, response.getBody().get(0).getBirthDate());
+    }
 
     @Test
     void update(){}
@@ -116,5 +132,7 @@ public class PersonControllerTest {
         personDTO.setId(PERSON_UUID);
         personDTO.setName(PERSON_NAME);
         personDTO.setBirthDate(PERSON_BIRTHDATE);
+
+        personDTOList.add(personDTO);
     }
 }
