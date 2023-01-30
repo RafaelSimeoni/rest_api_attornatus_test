@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -116,6 +115,19 @@ public class PersonServiceTest {
         assertEquals(PERSON_UUID, response.getId());
         assertEquals(PERSON_NAME, response.getName());
         assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+    }
+
+    @Test
+    void whenUpdateThenReturnEntityNotFoundException(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
+
+        try {
+            PersonDTO response = personService.update(PERSON_UUID, personForm);
+            fail("Expected exception was not thrown");
+        } catch (Exception e) {
+            assertEquals(EntityNotFoundException.class, e.getClass());
+            assertEquals("Person not found", e.getMessage());
+        }
     }
 
     @Test
