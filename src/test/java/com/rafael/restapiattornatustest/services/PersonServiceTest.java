@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,6 +36,9 @@ public class PersonServiceTest {
     @Spy
     private ModelMapper modelMapper;
 
+    private Person person;
+    private Person person2;
+    private List<Person> personList = new ArrayList<>();
     private Optional<Person> optionalPerson;
 
     @BeforeEach
@@ -43,7 +48,9 @@ public class PersonServiceTest {
     }
 
     @Test
-    void save(){}
+    void whenSaveThenReturnSuccess(){
+
+    }
 
     @Test
     void whenFindByIdThenReturnAnPersonInstance(){
@@ -71,7 +78,20 @@ public class PersonServiceTest {
     }
 
     @Test
-    void findAll(){}
+    void whenFindAllThenReturnAnPersonList(){
+        when(personRepository.findAll()).thenReturn(personList);
+
+        List<PersonDTO> response = personService.findAll();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+
+        assertEquals(PersonDTO.class, response.get(0).getClass());
+        assertEquals(PERSON_UUID, response.get(0).getId());
+        assertEquals(PERSON_NAME, response.get(0).getName());
+        assertEquals(PERSON_BIRTHDATE, response.get(0).getBirthDate());
+
+    }
 
     @Test
     void update(){}
@@ -101,6 +121,8 @@ public class PersonServiceTest {
         personDTO.setBirthDate(PERSON_BIRTHDATE);
 
         optionalPerson = Optional.of(person);
+
+        personList.add(person);
 
     }
 
