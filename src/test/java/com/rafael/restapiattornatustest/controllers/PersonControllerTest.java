@@ -114,13 +114,49 @@ public class PersonControllerTest {
     }
 
     @Test
-    void update(){}
+    void whenUpdateThenReturnOkAndPersonDTOInstance(){
+        when(personService.update(PERSON_UUID, personForm)).thenReturn(personDTO);
+
+        ResponseEntity<PersonDTO> response = personController.update(PERSON_UUID, personForm);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(PersonDTO.class, response.getBody().getClass());
+        assertEquals(PERSON_UUID, response.getBody().getId());
+        assertEquals(PERSON_NAME, response.getBody().getName());
+        assertEquals(PERSON_BIRTHDATE, response.getBody().getBirthDate());
+    }
 
     @Test
-    void savePersonAddress(){}
+    void whenSavePersonAddressThenReturnCreatedAndAddressDTOInstance(){
+        when(personService.savePersonAddress(PERSON_UUID, addressForm)).thenReturn(addressDTO);
+
+        ResponseEntity<AddressDTO> response = personController.savePersonAddress(PERSON_UUID, addressForm);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        assertEquals(AddressDTO.class, response.getBody().getClass());
+        assertEquals(ADDRESS_UUID, response.getBody().getId());
+        assertEquals(ADDRESS_CITY, response.getBody().getCity());
+        assertEquals(ADDRESS_PUBLIC_PLACE, response.getBody().getPublicPlace());
+        assertEquals(ADDRESS_ZIP_CODE, response.getBody().getZipCode());
+        assertEquals(ADDRESS_NUMBER, response.getBody().getNumber());
+
+    }
 
     @Test
-    void listPersonAddresses(){}
+    void whenListPersonAddressesThenReturnOkAndPersonAddressesDTOInstance(){
+
+
+    }
 
     @Test
     void changeMainAddress(){}
