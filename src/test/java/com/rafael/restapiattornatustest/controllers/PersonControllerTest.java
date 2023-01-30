@@ -77,7 +77,7 @@ public class PersonControllerTest {
     }
 
     @Test
-    void whenFindByIdThenReturnSuccess(){
+    void whenFindByIdThenReturnOkAndPersonDTOInstance(){
         when(personService.findById(PERSON_UUID)).thenReturn(personDTO);
 
         ResponseEntity<PersonDTO> response = personController.findById(PERSON_UUID);
@@ -95,7 +95,7 @@ public class PersonControllerTest {
     }
 
     @Test
-    void whenFindAllThenReturnAListOfPersonDTO(){
+    void whenFindAllThenReturnOkAndAListOfPersonDTO(){
         when(personService.findAll()).thenReturn(personDTOList);
 
         ResponseEntity<List<PersonDTO>> response = personController.findAll();
