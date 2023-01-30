@@ -12,10 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class PersonControllerTest {
@@ -57,7 +62,22 @@ public class PersonControllerTest {
     void save(){}
 
     @Test
-    void findById(){}
+    void whenFindByIdThenReturnSuccess(){
+        when(personService.findById(PERSON_UUID)).thenReturn(personDTO);
+
+        ResponseEntity<PersonDTO> response = personController.findById(PERSON_UUID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(PersonDTO.class, response.getBody().getClass());
+        assertEquals(PERSON_UUID, response.getBody().getId());
+        assertEquals(PERSON_NAME, response.getBody().getName());
+        assertEquals(PERSON_BIRTHDATE, response.getBody().getBirthDate());
+    }
 
     @Test
     void findAll(){}
