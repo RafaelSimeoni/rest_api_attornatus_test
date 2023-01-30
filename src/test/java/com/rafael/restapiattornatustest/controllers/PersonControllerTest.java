@@ -178,7 +178,24 @@ public class PersonControllerTest {
     }
 
     @Test
-    void changeMainAddress(){}
+    void whenChangeMainAddressThenReturnOkAndddressDTOInstance(){
+        when(personService.changeMainAddress(PERSON_UUID, ADDRESS_UUID)).thenReturn(addressDTO);
+
+        ResponseEntity<AddressDTO> response = personController.changeMainAddress(PERSON_UUID, ADDRESS_UUID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(AddressDTO.class, response.getBody().getClass());
+        assertEquals(ADDRESS_UUID, response.getBody().getId());
+        assertEquals(ADDRESS_CITY, response.getBody().getCity());
+        assertEquals(ADDRESS_PUBLIC_PLACE, response.getBody().getPublicPlace());
+        assertEquals(ADDRESS_ZIP_CODE, response.getBody().getZipCode());
+        assertEquals(ADDRESS_NUMBER, response.getBody().getNumber());
+    }
 
     private void startAttributes() {
         addressForm = new AddressForm();
