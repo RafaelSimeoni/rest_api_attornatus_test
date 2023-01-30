@@ -59,7 +59,22 @@ public class PersonControllerTest {
     }
 
     @Test
-    void save(){}
+    void whenSaveThenReturnCreatedAndPersonDTOInstance(){
+        when(personService.save(personForm)).thenReturn(personDTO);
+
+        ResponseEntity<PersonDTO> response = personController.save(personForm);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        assertEquals(PersonDTO.class, response.getBody().getClass());
+        assertEquals(PERSON_UUID, response.getBody().getId());
+        assertEquals(PERSON_NAME, response.getBody().getName());
+        assertEquals(PERSON_BIRTHDATE, response.getBody().getBirthDate());
+    }
 
     @Test
     void whenFindByIdThenReturnSuccess(){
