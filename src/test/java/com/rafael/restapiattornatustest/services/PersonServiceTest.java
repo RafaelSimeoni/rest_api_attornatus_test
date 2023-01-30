@@ -236,7 +236,26 @@ public class PersonServiceTest {
     }
 
     @Test
-    void changeMainAddress(){}
+    void whenChangeMainAddressThenReturnAnAddressDTOAndChangeTheMainAddress(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
+        person.addAddress(address2);
+
+        try {
+            AddressDTO response = personService.changeMainAddress(PERSON_UUID, ADDRESS2_UUID);
+
+            assertNotNull(response);
+            assertEquals(AddressDTO.class, response.getClass());
+            assertEquals(true, response.getIsMainAddress());
+            assertEquals(ADDRESS2_UUID, response.getId());
+            assertEquals(ADDRESS2_NUMBER, response.getNumber());
+            assertEquals(ADDRESS2_CITY, response.getCity());
+            assertEquals(ADDRESS2_PUBLIC_PLACE, response.getPublicPlace());
+            assertEquals(ADDRESS2_ZIP_CODE, response.getZipCode());
+
+        } catch (Exception e) {
+            fail("Unexpected exception was thrown");
+        }
+    }
 
     private void startAttributes() {
         addressForm = new AddressForm();
