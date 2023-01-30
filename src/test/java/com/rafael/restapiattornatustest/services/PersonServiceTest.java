@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -37,7 +38,8 @@ public class PersonServiceTest {
     private ModelMapper modelMapper;
 
     private Person person;
-    private Person person2;
+    private PersonForm personForm;
+    private PersonDTO personDTO;
     private List<Person> personList = new ArrayList<>();
     private Optional<Person> optionalPerson;
 
@@ -49,6 +51,15 @@ public class PersonServiceTest {
 
     @Test
     void whenSaveThenReturnSuccess(){
+        when(personRepository.save(Mockito.any(Person.class))).thenReturn(person);
+
+        PersonDTO response = personService.save(personForm);
+
+        assertNotNull(response);
+        assertEquals(PersonDTO.class, response.getClass());
+        assertEquals(PERSON_UUID, response.getId());
+        assertEquals(PERSON_NAME, response.getName());
+        assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
 
     }
 
@@ -94,7 +105,18 @@ public class PersonServiceTest {
     }
 
     @Test
-    void update(){}
+    void whenUpdateThenReturnSuccess(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
+        when(personRepository.save(Mockito.any(Person.class))).thenReturn(person);
+
+        PersonDTO response = personService.update(PERSON_UUID, personForm);
+
+        assertNotNull(response);
+        assertEquals(PersonDTO.class, response.getClass());
+        assertEquals(PERSON_UUID, response.getId());
+        assertEquals(PERSON_NAME, response.getName());
+        assertEquals(PERSON_BIRTHDATE, response.getBirthDate());
+    }
 
     @Test
     void savePersonAddress(){}
@@ -106,16 +128,16 @@ public class PersonServiceTest {
     void changeMainAddress(){}
 
     private void startPerson() {
-        Person person = new Person();
+        person = new Person();
         person.setId(PERSON_UUID);
         person.setName(PERSON_NAME);
         person.setBirthDate(PERSON_BIRTHDATE);
 
-        PersonForm personForm = new PersonForm();
+        personForm = new PersonForm();
         personForm.setName(PERSON_NAME);
         personForm.setBirthDate(PERSON_BIRTHDATE);
 
-        PersonDTO personDTO = new PersonDTO();
+        personDTO = new PersonDTO();
         personDTO.setId(PERSON_UUID);
         personDTO.setName(PERSON_NAME);
         personDTO.setBirthDate(PERSON_BIRTHDATE);
