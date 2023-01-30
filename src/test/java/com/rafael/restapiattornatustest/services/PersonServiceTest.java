@@ -2,6 +2,7 @@ package com.rafael.restapiattornatustest.services;
 
 import com.rafael.restapiattornatustest.exceptions.EntityNotFoundException;
 import com.rafael.restapiattornatustest.models.dtos.AddressDTO;
+import com.rafael.restapiattornatustest.models.dtos.PersonAddressesDTO;
 import com.rafael.restapiattornatustest.models.dtos.PersonDTO;
 import com.rafael.restapiattornatustest.models.entities.Address;
 import com.rafael.restapiattornatustest.models.entities.Person;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
@@ -114,7 +114,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    void whenFindAllThenReturnAnPersonList(){
+    void whenFindAllThenReturnAnPersonDTOList(){
         when(personRepository.findAll()).thenReturn(personList);
 
         List<PersonDTO> response = personService.findAll();
@@ -176,6 +176,7 @@ public class PersonServiceTest {
             assertEquals(ADDRESS_PUBLIC_PLACE, response.getPublicPlace());
             assertEquals(ADDRESS_ZIP_CODE, response.getZipCode());
             assertEquals(ADDRESS_NUMBER, response.getNumber());
+            assertEquals(true, response.getIsMainAddress());
 
         } catch (Exception e) {
             fail("Unexpected exception was thrown");
@@ -198,7 +199,41 @@ public class PersonServiceTest {
     }
 
     @Test
-    void listPersonAddresses(){}
+     void whenlistPersonAddressesThenReturnAnPersonAddressesDTO(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(optionalPerson);
+
+        try {
+            PersonAddressesDTO response = personService.listPersonAddresses(PERSON_UUID);
+
+            assertNotNull(response);
+            assertEquals(PersonAddressesDTO.class, response.getClass());
+            assertEquals(PERSON_UUID, response.getId());
+            assertEquals(PERSON_NAME, response.getName());
+            assertEquals(1, response.getAddressList().size());
+            assertEquals(ADDRESS_UUID, response.getAddressList().get(0).getId());
+            assertEquals(ADDRESS_NUMBER, response.getAddressList().get(0).getNumber());
+            assertEquals(ADDRESS_CITY, response.getAddressList().get(0).getCity());
+            assertEquals(ADDRESS_PUBLIC_PLACE, response.getAddressList().get(0).getPublicPlace());
+            assertEquals(ADDRESS_ZIP_CODE, response.getAddressList().get(0).getZipCode());
+
+        }catch (Exception e) {
+            fail("Unexpected exception was thrown");
+        }
+    }
+
+    @Test
+    void whenlistPersonAddressesThenReturnAnEntityNotFoundException(){
+        when(personRepository.findById(PERSON_UUID)).thenReturn(Optional.empty());
+
+        try {
+            PersonAddressesDTO response = personService.listPersonAddresses(PERSON_UUID);
+            fail("Expected exception was not thrown");
+
+        } catch (Exception e) {
+            assertEquals(EntityNotFoundException.class, e.getClass());
+            assertEquals("Person not found", e.getMessage());
+        }
+    }
 
     @Test
     void changeMainAddress(){}
