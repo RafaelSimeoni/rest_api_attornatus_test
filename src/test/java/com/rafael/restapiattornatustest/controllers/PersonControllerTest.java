@@ -48,8 +48,9 @@ public class PersonControllerTest {
     private PersonForm personForm;
     private PersonDTO personDTO;
     private AddressForm addressForm;
-    private AddressDTO addressDTO;
+    private AddressDTO addressDTO, addressDTO2;
     private List<PersonDTO> personDTOList = new ArrayList<>();
+    private List<AddressDTO> addressDTOList = new ArrayList<>();
     private PersonAddressesDTO personAddressesDTO;
 
     @BeforeEach
@@ -154,7 +155,25 @@ public class PersonControllerTest {
 
     @Test
     void whenListPersonAddressesThenReturnOkAndPersonAddressesDTOInstance(){
+        when(personService.listPersonAddresses(PERSON_UUID)).thenReturn(personAddressesDTO);
 
+        ResponseEntity<PersonAddressesDTO> response = personController.listPersonAddresses(PERSON_UUID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(PersonAddressesDTO.class, response.getBody().getClass());
+        assertEquals(2, response.getBody().getAddressList().size());
+        assertEquals(PERSON_UUID, response.getBody().getId());
+        assertEquals(PERSON_NAME, response.getBody().getName());
+        assertEquals(ADDRESS_UUID, response.getBody().getAddressList().get(0).getId());
+        assertEquals(ADDRESS_CITY, response.getBody().getAddressList().get(0).getCity());
+        assertEquals(ADDRESS_PUBLIC_PLACE, response.getBody().getAddressList().get(0).getPublicPlace());
+        assertEquals(ADDRESS_ZIP_CODE, response.getBody().getAddressList().get(0).getZipCode());
+        assertEquals(ADDRESS_NUMBER, response.getBody().getAddressList().get(0).getNumber());
 
     }
 
@@ -175,6 +194,13 @@ public class PersonControllerTest {
         addressDTO.setPublicPlace(ADDRESS_PUBLIC_PLACE);
         addressDTO.setNumber(ADDRESS_NUMBER);
 
+        addressDTO2 = new AddressDTO();
+        addressDTO2.setId(ADDRESS2_UUID);
+        addressDTO2.setCity(ADDRESS2_CITY);
+        addressDTO2.setZipCode(ADDRESS2_ZIP_CODE);
+        addressDTO2.setPublicPlace(ADDRESS2_PUBLIC_PLACE);
+        addressDTO2.setNumber(ADDRESS2_NUMBER);
+
         personForm = new PersonForm();
         personForm.setName(PERSON_NAME);
         personForm.setBirthDate(PERSON_BIRTHDATE);
@@ -185,5 +211,13 @@ public class PersonControllerTest {
         personDTO.setBirthDate(PERSON_BIRTHDATE);
 
         personDTOList.add(personDTO);
+
+        addressDTOList.add(addressDTO);
+        addressDTOList.add(addressDTO2);
+
+        personAddressesDTO = new PersonAddressesDTO();
+        personAddressesDTO.setId(PERSON_UUID);
+        personAddressesDTO.setName(PERSON_NAME);
+        personAddressesDTO.setAddressList(addressDTOList);
     }
 }
