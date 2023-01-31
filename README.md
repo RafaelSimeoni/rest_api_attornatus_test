@@ -146,7 +146,8 @@ URL /person/address/d661654b-889e-4ca1-8bb4-d0461735f446
 {"id": "86b88cf8-defa-48b1-8ee5-2fd030a8f0ad", 
 "publicPlace": "Rua das Flores", 
 "zipCode": "81015-036", 
-"number": 123, "city": "Curitiba", "isMainAddress": true} 
+"number": 123, "city": "Curitiba", 
+"isMainAddress": true} 
 ]}
 ```
 ------------------
