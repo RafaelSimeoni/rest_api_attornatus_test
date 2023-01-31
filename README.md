@@ -10,6 +10,7 @@ API Rest em Spring boot de gerenciamento de pessoas. Trata-se de um teste para u
 - JUnit 
 - Mockito
 - Model Mapper
+- Banco de dados H2
 
 ## Princípios Seguidos
 - Respeito aos princípios do SOLID 
